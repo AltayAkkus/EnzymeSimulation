@@ -21,7 +21,7 @@ function draw() {
 }
 
 function updateText() {
-	select('#reactions').html(`Reaktionen: ${reactions.length}`)
+	select('#reactions').html(`Reaktionen: ${reactions}`)
 }
 
 /*function checkComplete() {
@@ -32,11 +32,11 @@ function updateText() {
 
 function moveDots() {
 	for (const dot of dots) {
-		dot.move()
-		fill(dot.colour)
-		dot.render()
-		for (const dot2 of dots) {
-			if(dot.active) {
+		if(dot.active) {
+			dot.move()
+			fill(dot.colour)
+			dot.render()
+			for (const dot2 of dots) {
 				checkCollision(dot, dot2)
 			}
 		}
@@ -64,9 +64,11 @@ function checkCollision(dot, dot2) {
 			deleteEntity(dot2)
 			if(dot.reacted) {
 				//Enzyme completed reaction
+				console.log("Reaction complete")
 				reactions += 1 
 				dot.reacted = false 
 			} else {
+				console.log("Reacted = true")
 				dot.reacted = true 
 			}
 		} else {
@@ -90,8 +92,8 @@ function areBothEnzymes(dot, dot2) {
 	return dot.enzyme && dot2.enzyme
 }
 function deleteEntity(dot) {
-	dot.colour = 
 	dot.active = false;
+	console.log("Entity deleted")
 }
 /*
 function isOneInfected(dot, dot2) {
