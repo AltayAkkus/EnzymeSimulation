@@ -1,13 +1,15 @@
 'use strict'
 
-const width = window.innerWidth
-const height = 800
+const width = window.innerWidth 
+const height = window.height * 0.5
 
-const population = 100
+const substratePopulation = 100
+const enzymePopulation = 5
 
 const dots = []
 let reactions = 0
 const enzymes = []
+const substrates = []
 
 function setup() {
 	createCanvas(width, height)
@@ -24,11 +26,11 @@ function updateText() {
 	select('#reactions').html(`Reaktionen: ${reactions}`)
 }
 
-/*function checkComplete() {
-	if (dots.length - infected.length == 0) {
+function checkComplete() {
+	if (substratePopulation - (reactions*2) == 0) {
 		noLoop()
 	}
-}*/
+}
 
 function moveDots() {
 	for (const dot of dots) {
@@ -57,7 +59,7 @@ function checkCollision(dot, dot2) {
 	//Calculates distance between dot and dot2, checks if the distance between is smaller than the size of the dots -> collision happened
 	//If so checks if one of the dots is infected, then infects the other.
 	if (dist(dot.pos.x, dot.pos.y, dot2.pos.x, dot2.pos.y) < dot.size 
-		&& isOneEnzyme(dot, dot2)) {
+		&& isOneEnzyme(dot, dot2) && dot.active && dot2.active) {
 		console.log("Collision!")
 		if(dot.enzyme) {
 			//Do nothing to the enzyme
@@ -69,7 +71,7 @@ function checkCollision(dot, dot2) {
 				dot.reacted = false 
 			} else {
 				console.log("Reacted = true")
-				dot.reacted = true 
+				dot.reacted = true
 			}
 		} else {
 			deleteEntity(dot)
@@ -105,14 +107,27 @@ function areBothInfected(dot, dot2) {
 }
 */
 function createPopulation() {
- 	for (let i = 1; i < population; i++) {
-		dots.push(new Dot(new Coordinate(width, height), 16, false, false, true))
+ 	for (let i = 1; i < substratePopulation; i++) {
+		createSubstrate()
 	}
-	createEnzyme()
+	for(let i = 1; i < enzymePopulation; i++) {
+		createEnzyme()
+	}
 }
 
 function createEnzyme() {
-	const enzyme = new Dot(new Coordinate(width, height), 16, true, false, true)
+	const enzyme = new Dot(new Coordinate(width, height), 32, true, false, true)
 	dots.push(enzyme)
 	enzymes.push(enzyme)
+}
+
+function createSubstrate() {
+	const substrate = new Dot(new Coordinate(width, height), 32, false, false, true)
+	dots.push(substrate)
+	substrates.push(substrate)
+}
+function changeSpeed(speed) {
+	for (const dot of dots) {
+		dot.speed = new Coordinate(speed, speed)
+	}
 }

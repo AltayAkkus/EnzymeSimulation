@@ -4,7 +4,7 @@ class Dot {
 	//Constructs shape
 	constructor(canvas, size, enzyme, reacted, active) {
 		this.pos = startLocation(canvas.x, canvas.y)
-		this.speed = randCoordinate()
+		this.speed = new Coordinate(1,1)
 		this.direction = randCoordinate()
 		//Checks if dot is enzyme, if so changes color
 		this.colour = enzyme ? color(255, 0, 0) : color(255, 255, 255)
@@ -30,13 +30,13 @@ class Dot {
 	}
 	//Renders a circle
 	render() {
-		ellipse(this.pos.x, this.pos.y, this.size)
+		if(this.enzyme) {
+			rect(this.pos.x, this.pos.y, this.size * 2, this.size * 1)
+		} else {
+			ellipse(this.pos.x, this.pos.y, this.size)
+		}
 	}
 	//TODO: Delete
-	infect() {
-		this.infected = true
-		this.colour = color(255, 0, 0)
-	}
 	collide() {
 		this.reacted = true
 		//TODO: Delete object
