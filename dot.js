@@ -31,26 +31,33 @@ class Dot {
 	//Renders a circle
 	render() {
 		if(this.enzyme) {
-			rect(this.pos.x, this.pos.y, this.size * 2, this.size * 1)
+			rect(this.pos.x, this.pos.y, this.size * 1.5, this.size * 0.75)
 		} else {
 			ellipse(this.pos.x, this.pos.y, this.size)
 		}
 	}
-	//TODO: Delete
-	collide() {
-		this.reacted = true
-		//TODO: Delete object
-	}
+
 
 
 }
 
 function hitBoundary(dot, axis) {
-	return dot.pos[axis] > dot.canvas[axis] - dot.size || dot.pos[axis] < dot.size 
+	if(dot.enzyme) {
+		if(axis == "x") {
+			return dot.pos[axis] > dot.canvas[axis] - (dot.size) || dot.pos[axis] < (dot.size) 
+		} else {
+			return dot.pos[axis] > dot.canvas[axis] - (dot.size) || dot.pos[axis] < (dot.size) 
+		}
+	} else {
+		return dot.pos[axis] > dot.canvas[axis] - dot.size || dot.pos[axis] < dot.size 
+	}
 }
 
 function startLocation(x, y) {
-	return new Coordinate(randRange(x, 5), randRange(y, 5))
+	console.log(x)
+	console.log(y)
+
+	return new Coordinate(randRange(x, 30), randRange(y, 50))
 }
 
 function randRange(max, min) {

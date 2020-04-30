@@ -1,18 +1,19 @@
 'use strict'
+const width = window.innerWidth * (10/16)
+const height = window.innerHeight * 0.75
 
-const width = window.innerWidth 
-const height = window.height * 0.5
-
-const substratePopulation = 100
-const enzymePopulation = 5
+const substratePopulation = 50
+const enzymePopulation = 2
 
 const dots = []
 let reactions = 0
 const enzymes = []
 const substrates = []
+const inactiveSubstrates = []
 
 function setup() {
-	createCanvas(width, height)
+	var canvas = createCanvas(width, height)
+	canvas.parent('sketch-holder');
 	createPopulation()
 }
 
@@ -27,7 +28,7 @@ function updateText() {
 }
 
 function checkComplete() {
-	if (substratePopulation - (reactions*2) == 0) {
+	if (substratePopulation - inactiveSubstrates.length == 0) {
 		noLoop()
 	}
 }
@@ -69,9 +70,12 @@ function checkCollision(dot, dot2) {
 				console.log("Reaction complete")
 				reactions += 1 
 				dot.reacted = false 
+
+				dot.colour = color(255, 0, 0)
 			} else {
 				console.log("Reacted = true")
 				dot.reacted = true
+				dot.colour = color(255, 193, 7)
 			}
 		} else {
 			deleteEntity(dot)
@@ -79,8 +83,11 @@ function checkCollision(dot, dot2) {
 				//Enzyme completed reaction
 				reactions += 1 
 				dot2.reacted = false 
+				dot2.colour = color(255, 0, 0)
+
 			} else {
 				dot2.reacted = true 
+				dot2.colour = color(255, 193, 7)
 			}
 		}
 	}
@@ -95,6 +102,7 @@ function areBothEnzymes(dot, dot2) {
 }
 function deleteEntity(dot) {
 	dot.active = false;
+	inactiveSubstrates.push(dot)
 	console.log("Entity deleted")
 }
 /*
@@ -107,10 +115,10 @@ function areBothInfected(dot, dot2) {
 }
 */
 function createPopulation() {
- 	for (let i = 1; i < substratePopulation; i++) {
+ 	for (let i = 0; i < substratePopulation; i++) {
 		createSubstrate()
 	}
-	for(let i = 1; i < enzymePopulation; i++) {
+	for(let i = 0; i < enzymePopulation; i++) {
 		createEnzyme()
 	}
 }
